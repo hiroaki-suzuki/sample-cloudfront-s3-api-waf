@@ -1,1 +1,1 @@
-# CloudFront & S3 & API Gateway & WAF サンプル“≠
+# CloudFront & S3 & API Gateway & WAF サンプル
