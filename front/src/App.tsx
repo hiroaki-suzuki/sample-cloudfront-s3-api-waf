@@ -16,6 +16,10 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
+type ApiResponse = {
+  users: User[];
+};
+
 type User = {
   id: number;
   name: string;
@@ -31,30 +35,12 @@ function App() {
     setLoading(true);
     setUsers([]);
 
-    setTimeout(() => {
-      const users: User[] = [
-        {
-          id: 1,
-          name: 'Taro',
-          username: 'taro',
-          email: 'taro@example.com',
-        },
-        {
-          id: 2,
-          name: 'Jiro',
-          username: 'jiro',
-          email: 'jiro@example.com',
-        },
-        {
-          id: 3,
-          name: 'Saburo',
-          username: 'saburo',
-          email: 'saburo@example.com',
-        },
-      ];
-      setUsers(users);
-      setLoading(false);
-    }, 1000);
+    fetch(`${import.meta.env.VITE_API_ENDPOINT}/users`)
+      .then((response) => response.json())
+      .then((data: ApiResponse) => {
+        setUsers(data.users);
+        setLoading(false);
+      });
   };
 
   return (
