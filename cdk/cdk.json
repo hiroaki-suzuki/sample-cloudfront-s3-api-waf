@@ -22,7 +22,9 @@
       "env": "local"
     },
     "dev": {
-      "env": "dev"
+      "env": "dev",
+      "enableIpRule": false,
+      "allowedIpV4": []
     },
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
     "@aws-cdk/core:checkSecretUsage": true,

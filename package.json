@@ -2,7 +2,11 @@
   "name": "sample-cloudfront-s3-api-waf",
   "scripts": {
     "start-front:local": "cd front && npm run dev",
-    "start-api:local": "cd cdk && npm run cdk -- synth -c environment=local cloudfront-s3-api-waf-local-api-deploy && sam local start-api -t ./cdk.out/cloudfront-s3-api-waf-local-api-deploy.template.json"
+    "start-api:local": "cd cdk && npm run cdk -- synth -c environment=local cloudfront-s3-api-waf-local-api-deploy && sam local start-api -t ./cdk.out/cloudfront-s3-api-waf-local-api-deploy.template.json",
+    "deploy-api:dev": "cd cdk && npm run cdk -- deploy -c environment=dev cloudfront-s3-api-waf-dev-api-deploy",
+    "deploy-infra:dev": "cd cdk && npm run cdk -- deploy -c environment=dev cloudfront-s3-api-waf-dev-waf cloudfront-s3-api-waf-dev-infra",
+    "destroy-api:dev": "cd cdk && npm run cdk -- destroy -c environment=dev cloudfront-s3-api-waf-dev-api-deploy",
+    "destroy-infra:dev": "cd cdk && npm run cdk -- destroy -c environment=dev cloudfront-s3-api-waf-dev-waf cloudfront-s3-api-waf-dev-infra"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.1.1",
