@@ -5,6 +5,7 @@ import { EnvValues } from '../lib/types/env-values';
 import { ApiDeployStack } from '../lib/api-deploy-stack';
 import { WafStack } from '../lib/waf-stack';
 import { InfraStack } from '../lib/infra-stack';
+import { FrontDeployStack } from '../lib/front-deploy-stack';
 
 const app = new cdk.App();
 
@@ -48,3 +49,17 @@ const infraStack = new InfraStack(app, `${namePrefix}-infra`, {
 });
 infraStack.addDependency(wafStack);
 infraStack.addDependency(apiDeployStack);
+
+// フロントエンドのデプロイ用のスタックの作成
+const frontDeployStack = new FrontDeployStack(app, `${namePrefix}-front-deploy`, {
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: 'ap-northeast-1',
+  },
+  crossRegionReferences: true,
+  namePrefix,
+  envValues,
+  frontSourceBucket: infraStack.frontSourceBucket,
+  distribution: infraStack.distribution,
+});
+frontDeployStack.addDependency(infraStack);

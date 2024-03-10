@@ -5,8 +5,10 @@
     "start-api:local": "cd cdk && npm run cdk -- synth -c environment=local cloudfront-s3-api-waf-local-api-deploy && sam local start-api -t ./cdk.out/cloudfront-s3-api-waf-local-api-deploy.template.json",
     "deploy-api:dev": "cd cdk && npm run cdk -- deploy -c environment=dev cloudfront-s3-api-waf-dev-api-deploy",
     "deploy-infra:dev": "cd cdk && npm run cdk -- deploy -c environment=dev cloudfront-s3-api-waf-dev-waf cloudfront-s3-api-waf-dev-infra",
+    "deploy-front:dev": "cd cdk && npm run cdk -- deploy -c environment=dev cloudfront-s3-api-waf-dev-front-deploy",
     "destroy-api:dev": "cd cdk && npm run cdk -- destroy -c environment=dev cloudfront-s3-api-waf-dev-api-deploy",
-    "destroy-infra:dev": "cd cdk && npm run cdk -- destroy -c environment=dev cloudfront-s3-api-waf-dev-waf cloudfront-s3-api-waf-dev-infra"
+    "destroy-infra:dev": "cd cdk && npm run cdk -- destroy -c environment=dev cloudfront-s3-api-waf-dev-waf cloudfront-s3-api-waf-dev-infra",
+    "destroy-front:dev": "cd cdk && npm run cdk -- destroy -c environment=dev cloudfront-s3-api-waf-dev-front-deploy"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.1.1",
