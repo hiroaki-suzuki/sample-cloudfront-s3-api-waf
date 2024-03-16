@@ -47,11 +47,9 @@ const infraStack = new InfraStack(app, `${namePrefix}-infra`, {
   restApi: apiDeployStack.restApi,
   restApiDomain: apiDeployStack.restApiDomain,
 });
-infraStack.addDependency(wafStack);
-infraStack.addDependency(apiDeployStack);
 
 // フロントエンドのデプロイ用のスタックの作成
-const frontDeployStack = new FrontDeployStack(app, `${namePrefix}-front-deploy`, {
+new FrontDeployStack(app, `${namePrefix}-front-deploy`, {
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: 'ap-northeast-1',
@@ -62,4 +60,3 @@ const frontDeployStack = new FrontDeployStack(app, `${namePrefix}-front-deploy`,
   frontSourceBucket: infraStack.frontSourceBucket,
   distribution: infraStack.distribution,
 });
-frontDeployStack.addDependency(infraStack);

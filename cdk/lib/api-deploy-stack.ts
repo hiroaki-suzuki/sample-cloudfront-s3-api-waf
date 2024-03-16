@@ -17,11 +17,12 @@ export class ApiDeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: ApiDeployStackProps) {
     super(scope, id, props);
 
-    const { namePrefix } = props;
+    const { namePrefix, envValues } = props;
 
     // API Gatewayを作成
     const api = new Api(this, 'Api', {
       namePrefix,
+      envValues,
     });
 
     // デプロイ

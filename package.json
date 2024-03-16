@@ -8,7 +8,9 @@
     "deploy-front:dev": "cd cdk && npm run cdk -- deploy -c environment=dev cloudfront-s3-api-waf-dev-front-deploy",
     "destroy-api:dev": "cd cdk && npm run cdk -- destroy -c environment=dev cloudfront-s3-api-waf-dev-api-deploy",
     "destroy-infra:dev": "cd cdk && npm run cdk -- destroy -c environment=dev cloudfront-s3-api-waf-dev-waf cloudfront-s3-api-waf-dev-infra",
-    "destroy-front:dev": "cd cdk && npm run cdk -- destroy -c environment=dev cloudfront-s3-api-waf-dev-front-deploy"
+    "destroy-front:dev": "cd cdk && npm run cdk -- destroy -c environment=dev cloudfront-s3-api-waf-dev-front-deploy",
+    "deploy-all:dev": "cd cdk && npm run cdk -- deploy -c environment=dev --all --require-approval never",
+    "destroy-all:dev": "cd cdk && npm run cdk -- destroy -c environment=dev --all --force"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.1.1",

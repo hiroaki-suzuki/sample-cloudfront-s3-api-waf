@@ -23,7 +23,7 @@ export class InfraStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: InfraStackProps) {
     super(scope, id, props);
 
-    const { namePrefix, webAclArn, restApi, restApiDomain } = props;
+    const { namePrefix, envValues, webAclArn, restApi, restApiDomain } = props;
 
     // CloudFrontのオリジンとなるフロントエンド用のS3バケットを作成
     const frontS3 = new FrontS3(this, 'FrontS3', {
@@ -33,6 +33,7 @@ export class InfraStack extends cdk.Stack {
     // CloudFrontを作成
     const cloudfront = new CloudFront(this, 'CloudFront', {
       namePrefix,
+      envValues,
       account: this.account,
       frontSourceBucket: frontS3.sourceBucket,
       restApi,

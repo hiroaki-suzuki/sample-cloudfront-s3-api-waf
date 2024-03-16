@@ -35,7 +35,7 @@ function App() {
     setLoading(true);
     setUsers([]);
 
-    fetch(`${import.meta.env.VITE_API_ENDPOINT}/users`)
+    fetch(`${import.meta.env.VITE_API_ENDPOINT}/users`, { referrerPolicy: 'no-referrer' })
       .then((response) => response.json())
       .then((data: ApiResponse) => {
         setUsers(data.users);

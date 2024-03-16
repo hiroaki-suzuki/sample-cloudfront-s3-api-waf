@@ -15,9 +15,11 @@ import { CfnDistribution } from 'aws-cdk-lib/aws-lightsail';
 import { Effect, PolicyStatement, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { IRestApi } from 'aws-cdk-lib/aws-apigateway';
 import { BaseBucket } from '../base/base-bucket';
+import { EnvValues } from '../types/env-values';
 
 interface CloudFrontProps {
   readonly namePrefix: string;
+  readonly envValues: EnvValues;
   readonly account: string;
   readonly frontSourceBucket: IBucket;
   readonly restApi: IRestApi;
@@ -31,7 +33,7 @@ export class CloudFront extends Construct {
   constructor(scope: Construct, id: string, props: CloudFrontProps) {
     super(scope, id);
 
-    const { namePrefix, account, frontSourceBucket, restApiDomain, webAclArn } = props;
+    const { namePrefix, envValues, account, frontSourceBucket, restApiDomain, webAclArn } = props;
 
     // CloudFrontのログを保存するS3バケットを作成
     const loggingBucket = this.createLoggingBucket(namePrefix);
@@ -43,6 +45,7 @@ export class CloudFront extends Construct {
       loggingBucket,
       restApiDomain,
       webAclArn,
+      envValues.apiRefererId,
     );
 
     // CloudFrontからのアクセスを許可するバケットポリシーを追加
@@ -64,6 +67,7 @@ export class CloudFront extends Construct {
     loggingBucket: IBucket,
     restApiDomain: string,
     webAclArn: string,
+    apiRefererId: string,
   ): Distribution {
     const distribution = new Distribution(this, 'Distribution', {
       comment: `${namePrefix}-distribution`,
@@ -77,7 +81,7 @@ export class CloudFront extends Construct {
       },
       additionalBehaviors: {
         '/api/*': {
-          origin: new HttpOrigin(restApiDomain),
+          origin: new HttpOrigin(restApiDomain, { customHeaders: { Referer: apiRefererId } }),
           allowedMethods: AllowedMethods.ALLOW_ALL,
           viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           cachePolicy: CachePolicy.CACHING_DISABLED,

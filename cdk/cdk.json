@@ -19,12 +19,14 @@
   "context": {
     "projectName": "cloudfront-s3-api-waf",
     "local": {
-      "env": "local"
+      "env": "local",
+      "apiRefererId": "deb4e4b781604f3991fd13c6d8e0a22a"
     },
     "dev": {
       "env": "dev",
       "enableIpRule": false,
-      "allowedIpV4": []
+      "allowedIpV4": [],
+      "apiRefererId": "deb4e4b781604f3991fd13c6d8e0a22a"
     },
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
     "@aws-cdk/core:checkSecretUsage": true,

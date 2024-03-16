@@ -1,5 +1,14 @@
 import { Construct } from 'constructs';
-import { IRole, ManagedPolicy, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
+import {
+  AnyPrincipal,
+  Effect,
+  IRole,
+  ManagedPolicy,
+  PolicyDocument,
+  PolicyStatement,
+  Role,
+  ServicePrincipal,
+} from 'aws-cdk-lib/aws-iam';
 import {
   AccessLogFormat,
   Cors,
@@ -10,9 +19,11 @@ import {
   RestApi,
 } from 'aws-cdk-lib/aws-apigateway';
 import { BaseLogGroup } from '../base/base-log-group';
+import { EnvValues } from '../types/env-values';
 
 interface ApiProps {
   readonly namePrefix: string;
+  readonly envValues: EnvValues;
 }
 
 export class Api extends Construct {
@@ -22,16 +33,16 @@ export class Api extends Construct {
   constructor(scope: Construct, id: string, props: ApiProps) {
     super(scope, id);
 
-    const { namePrefix } = props;
+    const { namePrefix, envValues } = props;
 
     // API Gatewayの作成
-    this.restApi = this.createRestApi(namePrefix);
+    this.restApi = this.createRestApi(namePrefix, envValues.apiRefererId);
 
     // Lambdaのロールの作成
     this.lambdaRole = this.createLambdaRole(namePrefix);
   }
 
-  private createRestApi(namePrefix: string): IRestApi {
+  private createRestApi(namePrefix: string, apiRefererId: string): IRestApi {
     const logGroup = new BaseLogGroup(this, 'ApiAccessLog', {
       logGroupName: `/aws/apigateway/${namePrefix}-api-access-log`,
     });
@@ -52,6 +63,27 @@ export class Api extends Construct {
         allowMethods: Cors.ALL_METHODS,
       },
       cloudWatchRole: true,
+      policy: new PolicyDocument({
+        statements: [
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            principals: [new AnyPrincipal()],
+            actions: ['execute-api:Invoke'],
+            resources: ['execute-api:/*/*/*'],
+          }),
+          new PolicyStatement({
+            effect: Effect.DENY,
+            principals: [new AnyPrincipal()],
+            actions: ['execute-api:Invoke'],
+            resources: ['execute-api:/*/*/*'],
+            conditions: {
+              StringNotEquals: {
+                'aws:Referer': apiRefererId,
+              },
+            },
+          }),
+        ],
+      }),
     });
 
     // 4XX系エラーレスポンスを設定
