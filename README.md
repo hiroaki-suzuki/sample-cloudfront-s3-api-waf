@@ -30,5 +30,12 @@
 
 ## 削除
 
+- S3のログバケットを空にする
+  - cloudfront-s3-api-waf-dev-cloudfront-log-bucket
 - ルートディレクトリで `npm run destroy-all:dev` で削除
-- CloudWatch Logsにログが残っている場合は手動で削除する必要がある
+- CloudWatch Logsにロググループが残っているので手動で削除する
+  - `cloudfront-s3-api-waf` で検索して削除する
+  - 作成時刻を確認し対象と判断できる `/aws/codebuild/FrontDeployDeployToSourceBu-xxxxx` を削除する
+  - 作成時刻を確認し対象と判断できる `API-Gateway-Execution-Logs_xxxxxxx/api` を削除する
+- IAMロールが残っているので手動で削除する
+  - `cloudfront-s3-api-waf` で検索して削除する
